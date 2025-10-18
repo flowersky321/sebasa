@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kenangan Sebasa 💙</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap');
+    * {margin:0; padding:0; box-sizing:border-box;}
+    body {
+      font-family:'Poppins',sans-serif;
+      height:100vh;
+      background: radial-gradient(circle at top, #8cc9ff, #1b2a4b);
+      overflow:hidden;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      flex-direction:column;
+      color:#e6f2ff;
+      position:relative;
+    }
+
+    /* efek partikel cahaya */
+    .particle {
+      position:absolute;
+      width:5px; height:5px;
+      background:white;
+      border-radius:50%;
+      opacity:0.5;
+      animation: float 8s infinite;
+    }
+    @keyframes float {
+      0% {transform:translateY(0) scale(1);}
+      50% {transform:translateY(-80px) scale(1.3);}
+      100% {transform:translateY(0) scale(1);}
+    }
+
+    /* teks */
+    .text {
+      font-size:22px;
+      text-align:center;
+      opacity:0;
+      transition:opacity 2s ease-in-out;
+      text-shadow:0 0 10px #b5d9ff;
+      width:85%;
+      max-width:600px;
+    }
+    .fadeIn {opacity:1;}
+    .fadeOut {opacity:0;}
+
+    /* efek suara angin */
+    audio {
+      opacity:0;
+      margin-top:30px;
+      transition:opacity 2s;
+    }
+
+    /* tulisan tap */
+    .tap {
+      position:absolute;
+      bottom:20px;
+      font-size:14px;
+      opacity:0.6;
+      animation:pulse 2s infinite;
+      color:#dceaff;
+    }
+    @keyframes pulse {
+      0%,100%{opacity:0.6;}
+      50%{opacity:0.2;}
+    }
+  </style>
+</head>
+<body>
+  <div class="text" id="mainText">💭 Haii Sebasa...</div>
+
+  <audio id="song" loop>
+    <source src="https://files.catbox.moe/z5dtb9.mp3" type="audio/mpeg">
+  </audio>
+
+  <audio id="wind" loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/01/audio_6d967e42ce.mp3?filename=soft-wind-blowing-ambient-11780.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="tap" id="tapText">👆 Tap layar untuk mulai</div>
+
+  <script>
+    // buat partikel melayang
+    for(let i=0;i<25;i++){
+      const p=document.createElement('div');
+      p.classList.add('particle');
+      p.style.left=Math.random()*100+'%';
+      p.style.top=Math.random()*100+'%';
+      p.style.animationDelay=Math.random()*8+'s';
+      document.body.appendChild(p);
+    }
+
+    const texts=[
+      "💭 Haii Sebasa...",
+      "🌤️ Dimanapun kalian berada, sukses selalu ya...",
+      "🎁 Aku punya sesuatu untuk kalian...",
+      "🕰️ Waktu kita memang sebentar, tapi kenangan bersama kalian nggak akan pernah aku lupakan 💙",
+      "🎧 Dengerin ya..."
+    ];
+
+    const translateText = `
+      🌧️ *Terjemahan Lirik “Kenangan Terindah”* 🌧️<br><br>
+      “Aku yang lemah tanpamu...<br>
+      Aku yang rentan karena cinta...<br>
+      Yang telah hilang darimu...<br>
+      Yang mampu menyanjungmu...”<br><br>
+      ➤ *Kadang, perpisahan bukan tentang berakhir — tapi tentang belajar menghargai kenangan.* 💭
+    `;
+
+    const main=document.getElementById('mainText');
+    const song=document.getElementById('song');
+    const wind=document.getElementById('wind');
+    const tap=document.getElementById('tapText');
+
+    async function showSequence(){
+      tap.style.display='none';
+      wind.volume=0.4;
+      wind.play().catch(()=>{});
+
+      for(let i=0;i<texts.length;i++){
+        main.classList.remove('fadeOut');
+        main.innerHTML=texts[i];
+        main.classList.add('fadeIn');
+        await new Promise(r=>setTimeout(r,3500));
+        main.classList.remove('fadeIn');
+        main.classList.add('fadeOut');
+        await new Promise(r=>setTimeout(r,2000));
+      }
+
+      song.volume=0.8;
+      song.play().catch(()=>{});
+      main.innerHTML=translateText;
+      main.classList.remove('fadeOut');
+      main.classList.add('fadeIn');
+      song.style.opacity=1;
+    }
+
+    document.body.addEventListener('click',showSequence,{once:true});
+  </script>
+</body>
+</html>
